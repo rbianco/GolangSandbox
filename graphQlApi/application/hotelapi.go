@@ -3,13 +3,17 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net/http"
 
-	hotelsearch "github.com/rbianco/GolangSandbox/graphQlApi/infrastructure/search"
+	"github.com/rbianco/GolangSandbox/graphQlApi/application/config"
+	"github.com/rbianco/GolangSandbox/graphQlApi/infrastructure/hotelsearch"
+	"github.com/spf13/viper"
 
 	"github.com/graphql-go/graphql"
 )
+
+var configuration config.Configuration
 
 var hotelType = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -47,7 +51,7 @@ var queryType = graphql.NewObject(
 
 					if isOK {
 
-						var hotelFake = hotelsearch.Hotel(idQuery)
+						var hotelFake = hotelsearch.Hotel(configuration.SearchServiceEndPoint, idQuery)
 						return hotelFake[0], nil
 					}
 					return nil, nil
@@ -66,7 +70,7 @@ var queryType = graphql.NewObject(
 
 					if isOK {
 
-						var hotelList = hotelsearch.Hotel(idQuery)
+						var hotelList = hotelsearch.Hotel(configuration.SearchServiceEndPoint, idQuery)
 						return hotelList, nil
 					}
 					return nil, nil
@@ -94,28 +98,26 @@ func executeQuery(query string, schema graphql.Schema) *graphql.Result {
 
 func main() {
 
+	initConfig()
 	http.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
 		result := executeQuery(r.URL.Query().Get("query"), schema)
 		json.NewEncoder(w).Encode(result)
 	})
 
 	fmt.Println("Now server is running on port 8080")
-	fmt.Println("Test with Get      : curl -g 'http://localhost:8080/graphql?query={user(id:\"1\"){name}}'")
+	fmt.Println("Test with Get      : curl -g 'http://localhost:8080/graphql?query={hotelList(id:\"55688\"){id,name,title,uri}}'")
 	http.ListenAndServe(":8080", nil)
 }
 
-//Helper function to import json from file to map
-func importJSONDataFromFile(fileName string, result interface{}) (isOK bool) {
-	isOK = true
-	content, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		fmt.Print("Error:", err)
-		isOK = false
+func initConfig() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error al leer del archivo config, %s", err)
 	}
-	err = json.Unmarshal(content, result)
+	err := viper.Unmarshal(&configuration)
 	if err != nil {
-		isOK = false
-		fmt.Print("Error:", err)
+		log.Fatalf("Error al deserializar la configuración, %s", err)
 	}
-	return
 }

@@ -6,12 +6,13 @@ import (
 	"fmt"
 
 	"github.com/rbianco/GolangSandbox/graphQlApi/domain/model"
-	externalsearchmodel "github.com/rbianco/GolangSandbox/graphQlApi/infrastructure/search/model"
+	"github.com/rbianco/GolangSandbox/graphQlApi/infrastructure/hotelsearch/externalsearchmodel"
 	resty "gopkg.in/resty.v1"
 )
 
 // Retrieve hotel from hotel search service
-func Hotel(s string) []model.Hotel {
+func Hotel(searchEndpoing string, s string) []model.Hotel {
+
 	resp, err := resty.R().
 		SetQueryParams(map[string]string{
 			"organizationId": "1",
@@ -22,7 +23,7 @@ func Hotel(s string) []model.Hotel {
 			"getFilters":     "true",
 		}).
 		SetHeader("Accept", "application/json").
-		Get("https://searchservice.com/stage/api/hotel-list/" + s)
+		Get(searchEndpoing + s)
 
 	if resp.IsError() {
 		return []model.Hotel{}
