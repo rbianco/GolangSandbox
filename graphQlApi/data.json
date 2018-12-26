@@ -1,0 +1,19 @@
+{
+    "100222":{
+        "id": "100222",
+        "name": "Occidental Costa Cancun",
+        "uri": "occidental-costa-cancun",
+        "title": "Hotel familiar todo incluido junto a playa Linda y El Embarcadero",
+        "mainPhoto": {
+            "baseUri": "http://cdn.precioyviajes.com/03/08/48/03084816_tm.jpg",
+            "cloudUri": "https://d3fky3asuafjls.cloudfront.net/AehQYFS72j-capqW-ygV8YwtbsA=/100x100/03/08/48/03084816.jpg",
+            "idPhoto": 3084816
+        }
+}, 
+"100653":{
+    "id": "100653",
+    "name": "Seadust Cancun Family Resort",
+    "uri": "seadust-cancun-family-resort",
+    "title": "Hotel familiar todo incluido en playa Delfines con parque acuático"
+    }
+}

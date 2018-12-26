@@ -1,0 +1,37 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+### Above combination will ignore all files without extension ###
+
+# Ignore `bin` dir
+bin/
+# or
+*/bin/*
+
+#Terraform
+.terraform/
+*.tfstate
+*.backup
+
+#Serverless
+.serverless/
+
+#Binaries exe
+*.exe
+*.zip
+
+## coverage
+*.out
+*.html
+
+# Makefile
+Makefile
+.idea/
+*.bak
+*.test
