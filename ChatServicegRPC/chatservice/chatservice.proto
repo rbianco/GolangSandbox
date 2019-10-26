@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package chatservice;
+
+service ChatService{    
+    rpc Register(AddClientRequest) returns (AddClientResponse);
+    rpc ShowContacts(ShowContactsRequest) returns (stream ShowContactsResponse);
+    rpc SendMessage(stream ChatMessage) returns (SendMessageResponse);
+    rpc ReceiveMessage(GetMessagesRequest) returns (stream ChatMessage);
+}
+
+message Contact{
+    string Email = 1;
+
+    string Name = 2;
+}
+
+message AddClientRequest{
+    Contact contact = 1;
+}
+
+message AddClientResponse{
+    string Id = 1;
+
+    string Code = 2;
+}
+
+message ShowContactsRequest{
+    int32 Page = 1;
+    
+    int32 PageSize = 2;
+}
+
+message ShowContactsResponse{
+    Contact contact = 1;
+}
+
+message ChatMessage{    
+    string MessageFrom = 1;
+
+    string MessageTo = 2;
+
+    string Text = 3;
+}
+
+message GetMessagesRequest{
+    string Email = 1;
+}
+
+message SendMessageResponse{
+    string Code = 1;
+}
